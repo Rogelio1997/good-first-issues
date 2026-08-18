@@ -125,6 +125,9 @@ def search(
         period: ParsedDuration = parse_period(period)
         period = period.utc_date_time.strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    if all:
+        limit = 100
+
     # Identify the flags passed.
     query, variables, mode = services.identify_mode(
         name, repo, user, hacktoberfest, period, limit
@@ -148,7 +151,8 @@ def search(
 
     if mode == "search":
         issues, rate_limit = services.extract_search_results(response)
-        issues = issues[:limit]  # cannot set limit on the search_query directly
+        if not all:
+            issues = issues[:limit]  # cannot set limit on the search_query directly
 
     table_headers: List = ["Title", "Issue URL"]
 
