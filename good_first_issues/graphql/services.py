@@ -221,6 +221,11 @@ def caller(token: Union[str, bool], query: str, variables: Dict) -> Dict:
         console.print("Network connection timeout.:construction:", style="bold red")
 
         sys.exit()
+    except requests.exceptions.ConnectionError:
+        spinner.fail("Error")
+        console.print("Network connection error.:construction:", style="bold red")
+
+        sys.exit()
     except requests.exceptions.HTTPError:
         spinner.fail("Error")
         error = response.json().get("message")
